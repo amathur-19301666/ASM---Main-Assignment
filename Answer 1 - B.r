@@ -18,8 +18,6 @@ filtered_wines$region_index <- as.numeric(factor(filtered_wines$region_1))
 reorder(filtered_wines$region_1, filtered_wines$region_1, length)
 tapply(filtered_wines$region_1, filtered_wines$region_1, length)
 
-mean(filtered_wines$points)
-
 # Visualizations
 ggplot(filtered_wines) + geom_boxplot(aes(x = reorder(region_1, points, median), points, fill = reorder(region_1, points, median)), show.legend=FALSE)
 ggplot(filtered_wines, aes(x = reorder(region_1, region_1, length))) + stat_count()
@@ -88,15 +86,15 @@ apply(fit$params, 2, sd)
 mean(1/sqrt(fit$params[, 3]))
 sd(1/sqrt(fit$params[, 3]))
 theta_hat=apply(fit$theta,2,mean)
-fit_n <- as.mcmc(fit2$params)
+fit_n <- as.mcmc(fit$params)
 acf(fit_n)
 raftery.diag(fit_n)
 
 # Finding regions better than the average italian wine
-mean(filtered_wines$points)
+mean(theta_hat)
 result=data.frame(size = tapply(filtered_wines$points, filtered_wines$region_1, length), theta_hat = theta_hat)
 result$region = row.names(result)
-result = filter(result, (theta_hat > 86.58507))
+result = filter(result, (theta_hat > 86.56418))
 
 # evaluating the error 
 theta_ci <- apply(fit$theta, 2, quantile, prob = c(0.025, .975)) ## upper/lower bounds for thetas
